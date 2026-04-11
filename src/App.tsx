@@ -1,3 +1,6 @@
+// components
+import { ThemeProvider } from '@/components/ThemeProvider';
+
 export const App = () => {
-  return <div>App</div>;
+  return <ThemeProvider></ThemeProvider>;
 };
