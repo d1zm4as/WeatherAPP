@@ -13,7 +13,7 @@ type Theme = 'light' | 'dark' | 'system';
 type ThemeProviderProps = {
   children: React.ReactNode;
   defaultTheme?: Theme;
-  systemTheme?: string;
+  storageKey?: string;
 };
 
 type ThemeProviderState = {
@@ -52,9 +52,28 @@ export const ThemeProvider = ({
     }
   }, [theme]);
 
+  const value = {
+    theme,
+    setTheme: (theme: Theme) => {
+      localStorage.setItem(storageKey, theme);
+      setTheme(theme);
+    },
+  };
+
   return (
-    <ThemeProviderContext.Provider value={{ theme, setTheme }}>
+    <ThemeProviderContext.Provider
+      {...props}
+      value={value}
+    >
       {children}
     </ThemeProviderContext.Provider>
   );
+};
+
+export const useTheme = () => {
+  const context = useContext(ThemeProviderContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
 };
