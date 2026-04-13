@@ -44,5 +44,22 @@ import { MapPinnedIcon, SearchIcon } from 'lucide-react';
 import type { Geocoding } from '@/types';
 
 export const SearchDialog = () => {
+  //states
+  const [search, setSearch] = useState<string>('');
+  const [results, setResults] = useState<Geocoding[]>([]);
+  const [searchDialogOpen, setSearchDialogOpen] = useState<boolean>(false);
+  // search request
+
+  const geocoding = useCallback(async (search: string) => {
+    if (!search) return;
+    const response = await openWeatherApi.get('/geo/1.0/direct', {
+      params: {
+        q: search,
+        limit: WEATHER_API.DEFAULTS.SEARCH_RESULT_LIMIT,
+      },
+    });
+    return response.data as Geocoding[];
+  }, []);
+
   return <div>SearchDialog</div>;
 };
