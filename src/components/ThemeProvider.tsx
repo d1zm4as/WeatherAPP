@@ -1,10 +1,5 @@
-// node modules
-//
-import { createContext } from 'react';
-
-// Hooks
-
-import { useEffect, useState, useContext } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useEffect, useState } from 'react';
 
 //Types
 
@@ -21,12 +16,9 @@ type ThemeProviderState = {
   setTheme: (theme: Theme) => void;
 };
 
-const initialState: ThemeProviderState = {
-  theme: 'system',
-  setTheme: () => null,
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+const ThemeProviderContext = createContext<ThemeProviderState | undefined>(
+  undefined,
+);
 
 export const ThemeProvider = ({
   children,
@@ -34,28 +26,42 @@ export const ThemeProvider = ({
   storageKey = 'vite-ui-theme',
   ...props
 }: ThemeProviderProps) => {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
-  );
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window === 'undefined') return defaultTheme;
+    return (window.localStorage.getItem(storageKey) as Theme) || defaultTheme;
+  });
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
-    root.classList.add(theme);
+
+    const resolvedTheme =
+      theme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : theme;
+
+    root.classList.add(resolvedTheme);
+
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
-      root.classList.add(systemTheme);
-      return;
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = () => {
+        root.classList.remove('light', 'dark');
+        root.classList.add(media.matches ? 'dark' : 'light');
+      };
+
+      media.addEventListener('change', handleChange);
+      return () => media.removeEventListener('change', handleChange);
     }
   }, [theme]);
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
+      window.localStorage.setItem(storageKey, theme);
       setTheme(theme);
     },
   };
@@ -72,7 +78,7 @@ export const ThemeProvider = ({
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;

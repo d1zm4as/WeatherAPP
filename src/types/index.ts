@@ -235,7 +235,7 @@ export interface Alert {
 export interface OneCallWeatherRes {
   lat: number;
   lon: number;
-  timezone: string;
+  timezone: string | number;
   timezone_offset: number;
   current: CurrentWeather;
   minutely: MinutelyForecast[];
