@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# WeatherAPP
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive weather dashboard built with React, TypeScript, Vite, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The app lets users:
 
-## React Compiler
+- view weather forecasts for a selected location
+- use geolocation to fetch the current position
+- switch between metric and imperial units
+- keep the last selected location in localStorage
+- handle loading and error states cleanly
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS v4
+- Mapbox GL
+- Axios
+- Recharts
+- Radix UI patterns
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Main Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- location search and selection
+- geolocation support
+- persisted unit preference
+- persisted coordinates
+- forecast dashboard with weather cards
+- clean loading and error handling
+- responsive layout for desktop and mobile
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## What makes this project useful for portfolio
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+This project shows more than just UI work. It includes:
+
+- async data fetching
+- browser storage
+- geolocation APIs
+- component composition
+- state management with hooks
+- a polished dashboard-style interface
+
+## Setup
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Build
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+npm run preview
 ```
+
+## Suggested improvements
+
+- add saved favorite locations
+- add hourly and daily forecast tabs
+- add weather alerts
+- add forecast comparison between cities
+- add charts for temperature and precipitation
+- add a more detailed loading skeleton state
+
+## Notes
+
+- The app stores user preferences in `localStorage`.
+- Coordinates are restored on reload so the experience feels persistent.
+- Weather data is fetched from the selected location rather than relying only on manual input.
